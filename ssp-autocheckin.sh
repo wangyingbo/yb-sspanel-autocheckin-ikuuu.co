@@ -52,6 +52,7 @@ if [ "${PUSH_KEY}" == "" ]; then
 else
     text="SSPanel Auto Checkin 签到结果"
     desp="站点: ${DOMAIN}"+$'\n\n'+"用户名: ${USERNAME}"+$'\n\n'+"${login_text}"+$'\n\n'+"${checkin_text}"+$'\n\n'
+    # server酱推送
     push=$(curl -k -s -d "text=${text}&desp=${desp}" "https://sc.ftqq.com/${PUSH_KEY}.send")
     push_code=$(echo ${push} | jq '.errno')
 
@@ -60,12 +61,13 @@ else
     else
         push_status='"签到结果推送失败"'
     fi
-    
-    # 企业微信推送给微信
-    echo "企业微信开始推送了"
-    echo $desp
-    curl -G --data-urlencode "sendkey=wangyingbo" --data-urlencode "msg_type=text" --data-urlencode "to_user=WangYingBo" --data-urlencode "msg=${desp}" 'https://service-d606bcz6-1304203451.usw.apigw.tencentcs.com/release/wecomchan'
 fi
+
+wcdesp="站点: ${DOMAIN}"+$'\n\n'+"用户名: ${USERNAME}"+$'\n\n'+"${login_text}"+$'\n\n'+"${checkin_text}"+$'\n\n'
+# 企业微信推送给微信
+echo "企业微信开始推送了"
+echo $desp
+curl -G --data-urlencode "sendkey=wangyingbo" --data-urlencode "msg_type=text" --data-urlencode "to_user=WangYingBo" --data-urlencode "msg=${wcdesp}" 'https://service-d606bcz6-1304203451.usw.apigw.tencentcs.com/release/wecomchan'
 
 push_text="[${date}] ${push_status}"
 
